@@ -1,13 +1,12 @@
 package jp.co.sss.crud.service;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jp.co.sss.crud.bean.EmployeeBean;
 import jp.co.sss.crud.entity.Employee;
 import jp.co.sss.crud.form.EmployeeForm;
 import jp.co.sss.crud.repository.EmployeeRepository;
+import jp.co.sss.crud.util.BeanManager;
 
 /**
  * 従業員更新サービスクラス。
@@ -39,11 +38,10 @@ public class UpdateEmployeeService {
 	 * @param employeeForm 更新する従業員情報を格納したフォームオブジェクト（従業員IDを含む必要があります）
 	 */
 		public void execute(EmployeeForm employeeForm) {
-			Employee employee = new Employee();
-			BeanUtils.copyProperties(employeeForm,employee,"empId");
-			employee = employeeRepository.save(employee);
-			EmployeeBean employeeBean = new EmployeeBean();
-			BeanUtils.copyProperties(employee,employeeBean);
+			Employee employee = BeanManager.copyFormToEntity(employeeForm);
+
+			employeeRepository.save(employee);
+
 		}
 
 }

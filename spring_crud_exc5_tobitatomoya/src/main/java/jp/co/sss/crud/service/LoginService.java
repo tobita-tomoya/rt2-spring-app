@@ -48,19 +48,17 @@ public class LoginService {
 	 *         </ul>
 	 */
 	public LoginResultBean execute(LoginForm loginForm) {
-
-		LoginResultBean loginResultBean = null;
+		
 		Employee employee = repository.findByEmpIdAndEmpPass(loginForm.getEmpId(), loginForm.getEmpPass());
 
-		EmployeeBean loginUser = BeanManager.copyEntityToBean(employee);
-
-		if (loginUser != null) {
-			loginResultBean = LoginResultBean.succeedLogin(loginUser);
+		if (employee != null) {
+			// 認証成功時：employeeエンティティをBeanに変換して成功結果を返す
+			EmployeeBean loginUser = BeanManager.copyEntityToBean(employee);
+			return LoginResultBean.succeedLogin(loginUser);
 		} else {
-			loginResultBean = LoginResultBean.failLogin("社員ID、またはパスワードが間違っています。");
+			// 認証失敗時（employeeがnull）：指定のエラーメッセージを含んだ失敗結果を返す
+			return LoginResultBean.failLogin("社員ID、またはパスワードが間違っています。");
 		}
-
-		return loginResultBean;
 	}
 
 }

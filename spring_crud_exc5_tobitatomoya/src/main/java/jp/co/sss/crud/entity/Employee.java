@@ -13,34 +13,35 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "EMPLOYEE")
 public class Employee {
 	
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_emp_gen")
     @SequenceGenerator(name = "seq_emp_gen", sequenceName = "seq_emp", allocationSize = 1)
+    @Column(name = "EMP_ID") 
     private Integer empId;
-
-    @Column
+	
+    @Column(name = "EMP_PASS") 
     private String empPass;
 
-    @Column
+    @Column(name = "EMP_NAME")
     private String empName;
 
-    @Column
+    @Column(name = "GENDER")
     private Integer gender;
 
-    @Column
+    @Column(name = "ADDRESS") 
     private String address;
 
-    @Column
+    @Column(name = "BIRTHDAY")
     private Date birthday;
 
-    @Column
+    @Column(name = "AUTHORITY")
     private Integer authority;
 
     @ManyToOne
-    @JoinColumn(name = "dept_id", referencedColumnName = "deptId")
+    @JoinColumn(name = "DEPT_ID", referencedColumnName = "DEPT_ID")
     private Department department;
 
     public Integer getEmpId() {

@@ -9,11 +9,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="table")
+@Table(name="DEPARTMENT")
 public class Department{
 	@Id
+	@Column(name = "DEPT_ID") 
 	private Integer deptId;
-	@Column
+	@Column(name = "DEPT_NAME")
 	private String deptName;
 	
 	@OneToMany(mappedBy = "department")

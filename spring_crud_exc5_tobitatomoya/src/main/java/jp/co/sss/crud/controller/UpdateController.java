@@ -5,6 +5,8 @@ import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,7 +37,7 @@ public class UpdateController {
 	 * @throws ParseException 
 	 */
 	@RequestMapping(path = "/update/input", method = RequestMethod.GET)
-	public String inputUpdate(Integer empId, @ModelAttribute EmployeeForm employeeForm, Model model) {
+	public String inputUpdate(Integer empId, @ModelAttribute EmployeeForm employeeForm, Model model ) {
 
 		EmployeeBean employee = null;
 
@@ -58,7 +60,10 @@ public class UpdateController {
 	 * @return 遷移先のビュー
 	 */
 	@RequestMapping(path = "/update/check", method = RequestMethod.POST)
-	public String checkUpdate(@ModelAttribute EmployeeForm employeeForm) {
+	public String checkUpdate(@Validated @ModelAttribute EmployeeForm employeeForm , BindingResult result) {
+		if (result.hasErrors()) {
+			return "update/update_input";
+		}
 
 		return "update/update_check";
 	}
@@ -85,7 +90,7 @@ public class UpdateController {
 	public String completeUpdate(EmployeeForm employeeForm) {
 
 		//TODO UpdateEmployeeService完成後にコメントを外す
-		//		updateEmployeeService.execute(employeeForm);
+				updateEmployeeService.execute(employeeForm);
 
 		return "redirect:/update/complete";
 	}

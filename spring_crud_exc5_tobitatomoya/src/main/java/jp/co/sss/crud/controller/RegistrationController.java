@@ -2,7 +2,8 @@ package jp.co.sss.crud.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,11 +42,14 @@ public class RegistrationController {
 	 * @return 遷移先のビュー
 	 */
 	@RequestMapping(path = "/regist/check", method = RequestMethod.POST)
-	public String checkRegist(@ModelAttribute EmployeeForm employeeForm, Model model) {
+	public String checkRegist(@Validated @ModelAttribute EmployeeForm employeeForm,BindingResult result) {
+		if (result.hasErrors()) {
+	       
+	        return "regist/regist_input";
+	    }
 
-		return "regist/regist_check";
+	    return "regist/regist_check";
 	}
-
 	/**
 	 * 変更内容入力画面に戻る
 	 *
@@ -65,7 +69,7 @@ public class RegistrationController {
 	 * @return リダイレクト：完了画面
 	 */
 	@RequestMapping(path = "/regist/complete", method = RequestMethod.POST)
-	public String completeRegist(EmployeeForm employeeForm) {
+	public String completeRegist(@ModelAttribute EmployeeForm employeeForm) {
 
 		//登録実行
 		//TODO RegisterEmployeeService完成後にコメントを外す

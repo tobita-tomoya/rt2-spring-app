@@ -39,7 +39,7 @@ public class SearchAllEmployeesService {
 	 * @return 全従業員のEmployeeBeanリスト（従業員ID昇順）。データが存在しない場合は空のリストを返却
 	 */
 	public List<EmployeeBean> execute(){
-		List<Employee> empList = employeeRepository.findAllByOrderByEmpIdAsk();
+		List<Employee> empList = employeeRepository.findAllByOrderByEmpId();
 		List<EmployeeBean> returnEmployeeBeans = BeanManager.copyEntityListToBeanList(empList);
 
 		return returnEmployeeBeans;

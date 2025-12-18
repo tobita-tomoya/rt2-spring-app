@@ -10,6 +10,10 @@
 	
 	<div class="update">
 		<form th:action="@{/update/check}" method="post" th:object="${employeeForm}">
+			
+			<div th:if="${#fields.hasAnyErrors()}" class="error_list" style="color:red;">
+            <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+        </div>
 	
 			<div class="form">
 				<div class="label">パスワード：</div>
