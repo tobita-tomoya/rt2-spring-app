@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>スケジュール削除確認</title>
+    
+</head>
+<body>
+    <h1>削除確認</h1>
+    <p>以下のスケジュールを削除しますか？</p>
+
+    <table border="1">
+        <tr>
+            <th>カレンダーID</th>
+          
+            <td th:text="${schedules.calendarId}"></td>
+        </tr>
+        <tr>
+            <th>訪問日</th>
+            <td th:text="${#dates.format(schedules.visitDate, 'yyyy/MM/dd')}"></td>
+        </tr>
+        <tr>
+            <th>顧客名</th>
+            <td th:text="${schedules.client}"></td>
+        </tr>
+        <tr>
+            <th>担当者名</th>
+            <td th:text="${schedules.pic}"></td>
+        </tr>
+        <tr>
+            <th>社員ID</th>
+            <td th:text="${schedules.empId}"></td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 20px;">
+      
+        <form th:action="@{/delete/calendar/complete}" method="post">
+            
+            <input type="hidden" name="calendarId" th:value="${schedules.calendarId}" />
+            
+            <input type="submit" value="削除" />
+            <button type="button" onclick="history.back()">戻る</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+
+<head>
+    <title>営業予定一覧 | 社員管理システム</title>
+    <meta charset="UTF-8" />
+</head>
+
+<body>
+    <h3>私の営業予定（2025年）</h3>
+
+   
+    <th:block th:if="${!#lists.isEmpty(schedules)}">
+        <table class="list_table">
+            <thead>
+                <tr>
+                    <th>訪問日</th>
+                    <th>営業先</th>
+                    <th>担当者</th>
+                    <th class="button">変更</th>
+                    <th class="button">削除</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="sche : ${schedules}">
+                  
+                    <td th:text="${#dates.format(sche.visitDate, 'yyyy/MM/dd')}"></td>
+                    <td th:text="${sche.client}"></td>
+                    <td th:text="${sche.pic}"></td>
+                    <td>
+                    <form method="get" th:action="@{/update/calendar/input}">
+                        <input type="hidden" name="calendarId" th:value="${sche.calendarId}" />
+                        <input type="submit" value="変更" />
+                    </form>
+                </td>
+                
+               
+                <td>
+                    <form method="get" th:action="@{/delete/calendar/check}">
+                        <input type="hidden" name="calendarId" th:value="${sche.calendarId}" />
+                        <input type="submit" value="削除" class="delete" />
+                    </form>
+                </td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </th:block>
+
+   
+    <th:block th:if="${#lists.isEmpty(schedules)}">
+        <div class="message">
+            <p>登録されている予定はありません。</p>
+        </div>
+    </th:block>
+
+    <div class="regist_link" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 5px;">
+    <form th:action="@{/calendar/detail}" method="get" style="display: inline-flex; align-items: center; gap: 10px;">
+        <label style="font-weight: bold;">📅 日付を指定して登録：</label>
+       
+        <input type="date" name="date" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required/>
+        <button type="submit" style="cursor: pointer;">登録画面へ</button>
+    </form>
+    
+    <div style="margin-top: 15px;">
+        <a th:href="@{/list}">社員一覧に戻る</a>
+    </div>
+</div>
+</body>
+
+</html>

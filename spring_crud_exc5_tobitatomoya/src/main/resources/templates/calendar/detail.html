@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+<head>
+    <title>スケジュール詳細・登録</title>
+    <style>
+        .detail-container { margin: 20px; }
+        .date-display { font-size: 1.5em; color: #333; margin-bottom: 20px; border-bottom: 2px solid #e0f2f7; }
+        .schedule-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        .schedule-table th, .schedule-table td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        .schedule-table th { background-color: #f4f4f4; }
+        .form-section { background-color: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        .btn-back { margin-top: 20px; display: inline-block; text-decoration: none; color: #007bff; }
+        label { display: inline-block; width: 100px; font-weight: bold; }
+        .form-group { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="detail-container">
+        <div class="date-display">
+            <!-- コントローラーから渡された selectedDate を表示 -->
+            <span th:text="${selectedDate}">2025/12/19</span> の営業予定
+        </div>
+
+        <h3>現在の予定</h3>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>営業先（会社名）</th>
+                    <th>先方担当者</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 予定が空の場合 -->
+                <tr th:if="${#lists.isEmpty(scheduleList)}">
+                    <td colspan="3" style="text-align: center;">この日の予定はありません。</td>
+                </tr>
+                <!-- DBのテーブル定義(client, pic)に合わせてループ表示 -->
+                <tr th:each="schedule : ${scheduleList}">
+                    <td th:text="${schedule.client}">〇〇株式会社</td>
+                    <td th:text="${schedule.pic}">田中 太郎 様</td>
+                    <td>
+                        <form th:action="@{/calendar/delete}" method="post" style="display:inline;">
+                            <input type="hidden" name="calendarId" th:value="${schedule.calendarId}">
+                            <input type="hidden" name="date" th:value="${selectedDate}">
+                            <button type="submit" style="color:red;" onclick="return confirm('削除しますか？')">削除</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 新規登録フォーム -->
+        <div class="form-section">
+    <h3>新規予定の追加</h3>
+    <form th:action="@{/calendar/register}" method="post">
+        <!-- visitDate という名前で日付を送る（hidden） -->
+        <input type="hidden" name="visitDate" th:value="${selectedDate}">
+        
+        <div class="form-group">
+            <label>営業先：</label>
+            <!-- client という名前で営業先を送る -->
+            <input type="text" name="client" style="width: 300px;" placeholder="株式会社○○" required>
+        </div>
+        
+        <div class="form-group">
+            <label>先方担当者：</label>
+            <!-- pic という名前で担当者を送る -->
+            <input type="text" name="pic" style="width: 300px;" placeholder="佐藤 太郎">
+        </div>
+        
+        <div class="form-group" style="margin-left: 104px; margin-top: 15px;">
+            <button type="submit" class="regist_btn">登録する</button>
+        </div>
+    </form>
+</div>
+
+
+        <a th:href="@{/calendar}" class="btn-back">← 予定一覧へ戻る</a>
+    </div>
+</body>
+</html>

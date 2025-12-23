@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{common/layout_4block :: layout(~{::body/content()})}">
+<head>
+    <meta charset="UTF-8">
+    <title>スケジュール更新</title>
+    
+</head>
+<body>
+    <h1>スケジュール更新</h1>
+
+   
+    <form th:action="@{/update/calendar/check}" th:object="${calendarForm}" method="post">
+        
+       
+        <input type="hidden" th:field="*{calendarId}" />
+
+        <table border="1">
+            <tr>
+                <th>訪問日</th>
+                <td>
+                   
+                    <input type="date" th:field="*{visitDate}" required />
+                </td>
+            </tr>
+            <tr>
+                <th>顧客名</th>
+                <td>
+                    <input type="text" th:field="*{client}" placeholder="顧客名を入力" />
+                </td>
+            </tr>
+            <tr>
+                <th>担当者名</th>
+                <td>
+                    <input type="text" th:field="*{pic}" placeholder="担当者名を入力" />
+                </td>
+            </tr>
+        </table>
+
+        <div style="margin-top: 10px;">
+            <input type="submit" value="更新" />
+            
+            <a th:href="@{/calendar}">戻る</a>
+        </div>
+    </form>
+</body>
+</html>

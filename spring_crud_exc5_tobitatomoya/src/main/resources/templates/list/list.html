@@ -12,6 +12,10 @@
    
     <div class="regist_link">
         <a th:href="@{/regist/input}">新規社員登録</a>
+       <th:block th:if="${session.loginUser != null && session.loginUser.deptId == 1}">
+        &nbsp;|&nbsp;
+        <a th:href="@{/calendar}" style="color: green; font-weight: bold;">📅 営業日カレンダー</a>
+    </th:block>
     </div>
 
     <th:block th:if="${#lists.isEmpty(employees)}">

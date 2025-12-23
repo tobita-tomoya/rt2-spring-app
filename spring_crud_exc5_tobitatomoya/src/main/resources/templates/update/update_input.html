@@ -12,13 +12,20 @@
 		<form th:action="@{/update/check}" method="post" th:object="${employeeForm}">
 			
 			<div th:if="${#fields.hasAnyErrors()}" class="error_list" style="color:red;">
-            <p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p>
+				<p th:each="err : ${#fields.allErrors()}" style="display: flex; align-items: center;">
+        <span style="margin-right: 5px;">⚠️</span> 
+        <span th:text="${err}"></span>
+				</p>
         </div>
 	
 			<div class="form">
 				<div class="label">パスワード：</div>
-				<div class="input required">
+				 <div class="input required"style="display: flex; align-items: center; gap: 10px;">
 					<input type="password" th:field="*{empPass}" />
+					 <button type="button" id="toggleVisibility" 
+                style="cursor: pointer; padding: 2px 10px;">
+            Open
+        </button>
 				</div>
 			</div>
 			
@@ -88,5 +95,34 @@
 			</div>
 		</form>
 	</div>
+	<script>
+       
+           
+            const inp = document.getElementById('empPass');
+            const btn = document.getElementById('toggleVisibility');
+
+            if (inp && btn) {
+               
+                btn.addEventListener('mousedown', function(e) {
+                    
+                    inp.type = 'text';
+                    btn.textContent = 'Close';
+                });
+
+                
+                btn.addEventListener('mouseup', function() {
+                    inp.type = 'password';
+                    btn.textContent = 'Open';
+                });
+
+               
+                btn.addEventListener('mouseleave', function() {
+                    inp.type = 'password';
+                    btn.textContent = 'Open';
+                });
+                 }
+       
+       
+    </script>
 </body>
 </html>
