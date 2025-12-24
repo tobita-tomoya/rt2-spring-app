@@ -5,10 +5,13 @@ package jp.co.sss.crud.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import jakarta.validation.Valid;
 import jp.co.sss.crud.bean.EmployeeBean;
 import jp.co.sss.crud.entity.Calendar;
 import jp.co.sss.crud.form.CalendarForm;
@@ -32,7 +35,11 @@ public class CalendarUpdateController {
 	    return "calendar/update_calendar";
 	}
 	@RequestMapping(path="/update/calendar/check", method = RequestMethod.POST)
-    public String check(CalendarForm form, Model model) {
+    public String check(@Valid @ModelAttribute CalendarForm form, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+	        
+	        return "calendar/update_calendar";
+	    }
         model.addAttribute("calendarForm", form);
         return "calendar/update_calendar_check";
     }

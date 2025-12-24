@@ -12,11 +12,12 @@
 		 
 		<form th:action="@{/regist/check}" method="post" th:object="${employeeForm}">
 			  
-			<div th:if="${#fields.hasAnyErrors()}" class="error_list" style="color:red;">
-				<p th:each="err : ${#fields.allErrors()}" style="display: flex; align-items: center;">
+			<div th:if="${#fields.hasAnyErrors()}" class="error_list" style="color:red; margin-bottom: 20px;">
+    <p style="display: flex; align-items: center; margin: 5px 0;">
         <span style="margin-right: 5px;">⚠️</span> 
-        <span th:text="${err}"></span>
-        </div>
+        <span th:text="${#fields.detailedErrors()[0].message}"></span>
+    </p>
+</div>
 			<div class="form">
 				<div class="label">パスワード：</div>
 				<div class="input required"style="display: flex; align-items: center; gap: 10px;">

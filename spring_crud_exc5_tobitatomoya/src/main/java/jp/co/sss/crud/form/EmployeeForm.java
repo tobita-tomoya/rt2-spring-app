@@ -4,13 +4,20 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.validation.GroupSequence;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+@GroupSequence({EmployeeForm.Order1.class, EmployeeForm.Order2.class, EmployeeForm.class})
 public class EmployeeForm {
+public interface Order1 {}
+public interface Order2 {}
+
+
 	/** 社員ID */
 	
 	@Max(99999)
@@ -18,8 +25,8 @@ public class EmployeeForm {
 	private Integer empId;
 
 	/** パスワード */
-	 @NotBlank 
-	 @Size(min = 4,max = 16) 
+	 @NotBlank (groups = Order1.class)
+	 @Size(min =4,max = 16,groups =  Order2.class) 
 	 @Pattern(regexp = "^[0-9]*$") 
 	 
 	private String empPass;
@@ -41,6 +48,7 @@ public class EmployeeForm {
 	/** 生年月日 */
 	 @NotNull
 	 @DateTimeFormat(pattern = "yyyy/MM/dd")
+	 @Past
 	private Date birthday;
 
 	/** 権限 */

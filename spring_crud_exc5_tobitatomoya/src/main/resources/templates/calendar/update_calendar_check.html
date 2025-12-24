@@ -4,6 +4,12 @@
 <body>
     <h1>更新内容の確認</h1>
     <form th:action="@{/update/calendar/execute}" th:object="${calendarForm}" method="post">
+		<div th:if="${#fields.hasAnyErrors()}" class="error_list" style="color:red;">
+				<p th:each="err : ${#fields.allErrors()}" style="display: flex; align-items: center;">
+        <span style="margin-right: 5px;">⚠️</span> 
+        <span th:text="${err}"></span>
+				</p>
+        </div>
        
         <input type="hidden" th:field="*{calendarId}" />
         <input type="hidden" th:field="*{visitDate}" />

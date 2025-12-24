@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jakarta.servlet.http.HttpSession;
 import jp.co.sss.crud.bean.EmployeeBean;
+import jp.co.sss.crud.entity.Employee;
 import jp.co.sss.crud.form.EmployeeForm;
 import jp.co.sss.crud.service.SearchForEmployeesByEmpIdService;
 import jp.co.sss.crud.service.UpdateEmployeeService;
@@ -25,6 +27,13 @@ public class UpdateController {
 
 	@Autowired
 	UpdateEmployeeService updateEmployeeService;
+	
+private boolean isNotAdmin(HttpSession session) {
+		
+		Employee loginUser = (Employee) session.getAttribute("loginUser");
+		
+		return loginUser == null || loginUser.getAuthority() != 2; 
+	}
 
 	/**
 	 * 社員情報の変更内容入力画面を出力
@@ -37,7 +46,10 @@ public class UpdateController {
 	 * @throws ParseException 
 	 */
 	@RequestMapping(path = "/update/input", method = RequestMethod.GET)
-	public String inputUpdate(Integer empId, @ModelAttribute EmployeeForm employeeForm, Model model ) {
+	public String inputUpdate(Integer empId, @ModelAttribute EmployeeForm employeeForm, Model model, HttpSession session ) {
+		if (isNotAdmin(session)) {
+			return "redirect:/"; 
+		}
 
 		EmployeeBean employee = null;
 
@@ -62,6 +74,7 @@ public class UpdateController {
 	@RequestMapping(path = "/update/check", method = RequestMethod.POST)
 	public String checkUpdate(@Validated @ModelAttribute EmployeeForm employeeForm , BindingResult result) {
 		if (result.hasErrors()) {
+			
 			return "update/update_input";
 		}
 

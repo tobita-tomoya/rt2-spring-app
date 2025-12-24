@@ -14,16 +14,13 @@ public class CalendarDeleteController {
 	@Autowired
 	 CalendarRepository  calendarRepository;
 	
-	@RequestMapping(path = "/delete/calendar/check", method = RequestMethod.GET)
+	@RequestMapping(path = "/calendar/delete/check", method = {RequestMethod.GET, RequestMethod.POST}) 
 	public String checkDelete(Integer calendarId, Model model) {
-
-		Calendar schedule = calendarRepository.findByCalendarId(calendarId);
-		
-		model.addAttribute("schedules", schedule);
-		
-		return "calendar/delete_calendar_check";
+	    Calendar schedule = calendarRepository.findByCalendarId(calendarId);
+	    model.addAttribute("schedules", schedule);
+	    return "calendar/delete_calendar_check";
 	}
-	@RequestMapping(path = "/delete/calendar/complete", method = RequestMethod.POST)
+	@RequestMapping(path = "/delete/calendar/execute", method = RequestMethod.POST)
 	public String executeDelete(Integer calendarId) {
 	    
 	    calendarRepository.deleteById(calendarId);
@@ -32,7 +29,7 @@ public class CalendarDeleteController {
 	}
 	@RequestMapping(path = "/delete/calendar/complete", method = RequestMethod.GET)
 	public String completeDelete() {
-		return "delete/delete_calendar_complete";
+		return "calendar/delete_calendar_complete";
 	}
 
 

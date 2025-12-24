@@ -17,4 +17,6 @@ public interface CalendarRepository extends JpaRepository<Calendar, Integer> {
     List<Calendar> findByVisitDateAndEmpId(Date visitDate, Integer empId);
     
     Calendar findByCalendarId(Integer calendarId);
+
+	List<Calendar> findByVisitDate(java.sql.Date sqlDate);
 }

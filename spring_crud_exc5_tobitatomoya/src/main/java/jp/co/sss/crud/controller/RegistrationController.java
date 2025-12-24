@@ -8,15 +8,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jakarta.servlet.http.HttpSession;
+import jp.co.sss.crud.bean.EmployeeBean;
 import jp.co.sss.crud.form.EmployeeForm;
 import jp.co.sss.crud.service.RegisterEmployeeService;
 import jp.co.sss.crud.util.Constant;
+
 
 @Controller
 public class RegistrationController {
 
 	@Autowired
 	private RegisterEmployeeService service;
+	
+	private boolean isNotAdmin(HttpSession session) {
+		
+		EmployeeBean employeeBean = (EmployeeBean) session.getAttribute("loginUser");
+		
+		return employeeBean == null || employeeBean.getAuthority() != 2;
+	}
 
 	/**
 	 * 社員情報の登録内容入力画面を出力
@@ -24,7 +34,10 @@ public class RegistrationController {
 	 * @return 遷移先のビュー
 	 */
 	@RequestMapping(path = "/regist/input", method = RequestMethod.GET)
-	public String inputRegist(@ModelAttribute EmployeeForm employeeForm) {
+	public String inputRegist(@ModelAttribute EmployeeForm employeeForm, HttpSession session) {
+		if (isNotAdmin(session)) {
+			return "redirect:/"; 
+		}
 		employeeForm.setGender(Constant.DEFAULT_GENDER);
 		employeeForm.setAuthority(Constant.DEFAULT_AUTHORITY);
 		employeeForm.setDeptId(Constant.DEFAULT_DEPT_ID);

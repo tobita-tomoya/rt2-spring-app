@@ -19,6 +19,9 @@ public class DeleteController {
 
 	@Autowired
 	DeleteEmployeeService deleteEmployeeService;
+	
+
+
 
 	/**
 	 * 社員情報の削除内容確認画面を出力

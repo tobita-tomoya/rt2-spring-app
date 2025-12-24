@@ -9,7 +9,7 @@
 	<th:block th:fragment="layout-main">
 	<div th:object="${loginForm}">
 		<h3>ログイン画面</h3>
-		<!-- エラーメッセージの出力(入力チェック) -->
+		
 		<p>
 			<span th:each="error:${#fields.detailedErrors()}"> 
 				<span style="margin-right:5px;">⚠️</span>
@@ -17,7 +17,7 @@
 			</span>
 			<span th:text="${errMessage}" class="error"></span>
 		</p>
-		<!-- エラーメッセージの出力(存在チェック) -->
+		
 		<div class="login_form">
 			<form method="post" th:action="@{/login}">
 				<div class="login_form">

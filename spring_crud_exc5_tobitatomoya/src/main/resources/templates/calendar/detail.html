@@ -18,12 +18,13 @@
 <body>
     <div class="detail-container">
         <div class="date-display">
-            <!-- コントローラーから渡された selectedDate を表示 -->
+            
             <span th:text="${selectedDate}">2025/12/19</span> の営業予定
         </div>
 
         <h3>現在の予定</h3>
-        <table class="schedule-table">
+        <table class="schedule-table" 
+       th:if="${session.loginUser != null && #lists.toList(scheduleList).?[empId == __${session.loginUser.empId}__].size() > 0}">
             <thead>
                 <tr>
                     <th>営業先（会社名）</th>
@@ -31,49 +32,55 @@
                     <th>操作</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- 予定が空の場合 -->
-                <tr th:if="${#lists.isEmpty(scheduleList)}">
-                    <td colspan="3" style="text-align: center;">この日の予定はありません。</td>
-                </tr>
-                <!-- DBのテーブル定義(client, pic)に合わせてループ表示 -->
-                <tr th:each="schedule : ${scheduleList}">
-                    <td th:text="${schedule.client}">〇〇株式会社</td>
-                    <td th:text="${schedule.pic}">田中 太郎 様</td>
-                    <td>
-                        <form th:action="@{/calendar/delete}" method="post" style="display:inline;">
-                            <input type="hidden" name="calendarId" th:value="${schedule.calendarId}">
-                            <input type="hidden" name="date" th:value="${selectedDate}">
-                            <button type="submit" style="color:red;" onclick="return confirm('削除しますか？')">削除</button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
+           <tbody>
+    
+    
+       
+ 
+   
+    <th:block th:each="schedule : ${scheduleList}">
+       
+        <tr th:if="${session.loginUser != null && schedule.empId == session.loginUser.empId}">
+            <td th:text="${schedule.client}">〇〇株式会社</td>
+            <td th:text="${schedule.pic}">田中 太郎 様</td>
+            <td>
+                <form th:action="@{/calendar/delete/check}" method="post" style="display:inline;">
+                    <input type="hidden" name="calendarId" th:value="${schedule.calendarId}">
+                    <input type="hidden" name="date" th:value="${selectedDate}">
+                    <button type="submit" style="color:red;" onclick="return confirm('削除しますか？')">削除</button>
+                </form>
+            </td>
+        </tr>
+    </th:block>
+</tbody>
         </table>
 
-        <!-- 新規登録フォーム -->
+        
         <div class="form-section">
+   <div class="form-section">
     <h3>新規予定の追加</h3>
-    <form th:action="@{/calendar/register}" method="post">
-        <!-- visitDate という名前で日付を送る（hidden） -->
-        <input type="hidden" name="visitDate" th:value="${selectedDate}">
-        
-        <div class="form-group">
-            <label>営業先：</label>
-            <!-- client という名前で営業先を送る -->
-            <input type="text" name="client" style="width: 300px;" placeholder="株式会社○○" required>
-        </div>
-        
-        <div class="form-group">
-            <label>先方担当者：</label>
-            <!-- pic という名前で担当者を送る -->
-            <input type="text" name="pic" style="width: 300px;" placeholder="佐藤 太郎">
-        </div>
-        
-        <div class="form-group" style="margin-left: 104px; margin-top: 15px;">
-            <button type="submit" class="regist_btn">登録する</button>
-        </div>
-    </form>
+    
+    
+   <form th:action="@{/calendar/register}" th:object="${calendarForm}" method="post">
+ 
+    <input type="hidden" th:field="*{visitDate}">
+    
+    <div class="form-group">
+        <label>営業先：</label>
+      
+        <input type="text" th:field="*{client}" style="width: 300px;" placeholder="株式会社○○">
+        <div th:if="${#fields.hasErrors('client')}" th:errors="*{client}" style="color:red;"></div>
+    </div>
+    
+    <div class="form-group">
+        <label>先方担当者：</label>
+      
+        <input type="text" th:field="*{pic}" style="width: 300px;" placeholder="佐藤 太郎">
+        <div th:if="${#fields.hasErrors('pic')}" th:errors="*{pic}" style="color:red;"></div>
+    </div>
+    
+    <button type="submit">登録する</button>
+</form>
 </div>
 
 
